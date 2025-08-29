@@ -1,14 +1,19 @@
 #!/bin/bash
 
 # Установка переменных
+DOCKER_URL="https://gitlab.integra-s.com/devops/eily-acuario-docker-compose/-/archive/main/eily-acuario-docker-compose-main"
 DOCKER_DIR="/opt/docker"
 ZIP1="eily-acuario-docker-compose-main.zip"
 ZIP2="OSM-Tile-Server-Backup.zip"
 OSM_FILE=$(ls *.osm.pbf 2>/dev/null)
 RED='\033[0;31m'
 NC='\033[0m'
+
+#Выбор, устанавливать архивы или они уже загружены
+read -p "Установить архивы с облака, или запустить оффлайн установку с существующих архивов? (Y/y для да, остальное - нет): " online
+if [[ "$online" == "Y" || "$online" == "y" ]]; then
+    curl -L -o "$ZIP1" "$DOCKER_URL"
 #Проверка на наличие файлов в директории скрипта
-#curl -L -o eily-acuario-docker-compose-main.zip https://gitlab.integra-s.com/devops/eily-acuario-docker-compose/-/archive/main/eily-acuario-docker-compose-main.zip
 if [[! -f "$ZIP1"]]; then
     echo -e "$RED Ошибка. Архив с докером отсутствует $NC"
     exit 1
